@@ -38,7 +38,7 @@ if (isset($accessToken)) {
     } else {
         $_SESSION['facebook_access_token'] = (string) $accessToken;
         // OAuth 2.0 client handler
-        $oAuth2Client = $fb->getOAuth2Client();
+//        $oAuth2Client = $fb->getOAuth2Client();
         // Exchanges a short-lived access token for a long-lived one
         $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($_SESSION['facebook_access_token']);
         $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
