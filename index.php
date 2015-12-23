@@ -11,6 +11,9 @@ $fb = new Facebook\Facebook([
 
 $helper = $fb->getCanvasHelper();
 
+echo "Hello";
+die;
+
 $permissions = ['email', 'publish_actions']; // optional
 try {
     if (isset($_SESSION['facebook_access_token'])) {
@@ -48,7 +51,6 @@ if (isset($accessToken)) {
         if ($e->getCode() == 190) {
             unset($_SESSION['facebook_access_token']);
             $helper = $fb->getRedirectLoginHelper();
-            die;
             $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/', $permissions);
             echo "<script>window.top.location.href='".$loginUrl."'</script>";
             exit;
