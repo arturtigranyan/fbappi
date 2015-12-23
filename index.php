@@ -42,7 +42,7 @@ if (isset($accessToken)) {
 
     // validating the access token
 
-   /*
+
     try {
         $request = $fb->get('/me');
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
@@ -59,7 +59,7 @@ if (isset($accessToken)) {
         echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
     }
-*/
+
     // posting on user timeline using publish_actins permission
     try {
 
