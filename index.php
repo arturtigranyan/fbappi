@@ -10,6 +10,14 @@ $fb = new Facebook\Facebook([
     'default_graph_version' => 'v2.5',
 ]);
 
+$helper = $fb->getRedirectLoginHelper();
+
+$permissions = ['email']; // Optional permissions
+$loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/index.php', $permissions);
+
+echo '<a href="' . htmlspecialchars($loginUrl) . '">Log in with Facebook!</a>';
+
+/*
 $helper = $fb->getCanvasHelper();
 
 $permissions = ['email']; // optional
