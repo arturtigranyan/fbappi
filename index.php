@@ -9,10 +9,9 @@ $fb = new Facebook\Facebook([
     'default_graph_version' => 'v2.5',
 ]);
 
+
 $helper = $fb->getCanvasHelper();
-
-$permissions = ['email', 'publish_actions']; // optional
-
+$permissions = ['email']; // optionnal
 try {
     if (isset($_SESSION['facebook_access_token'])) {
         $accessToken = $_SESSION['facebook_access_token'];
@@ -40,7 +39,6 @@ if (isset($accessToken)) {
         $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
         $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
     }
-
     // validating the access token
     try {
         $request = $fb->get('/me');
@@ -49,7 +47,7 @@ if (isset($accessToken)) {
         if ($e->getCode() == 190) {
             unset($_SESSION['facebook_access_token']);
             $helper = $fb->getRedirectLoginHelper();
-            $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/', $permissions);
+            $loginUrl = $helper->getLoginUrl('https://apps.facebook.com/APP_NAMESPACE/', $permissions);
             echo "<script>window.top.location.href='".$loginUrl."'</script>";
             exit;
         }
@@ -58,31 +56,26 @@ if (isset($accessToken)) {
         echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
     }
-
-    // posting on user timeline using publish_actins permission
+    // getting basic info about user
     try {
-        // message must come from the user-end
-        $data = ['message' => 'testing...'];
-        $request = $fb->post('/me/feed', $data);
-        $response = $request->getGraphEdge()->asArray;
+        $profile_request = $fb->get('/me?fields=name,first_name,last_name,email');
+        $profile = $profile_request->getGraphNode()->asArray();
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
         // When Graph returns an error
         echo 'Graph returned an error: ' . $e->getMessage();
+        unset($_SESSION['facebook_access_token']);
+        echo "<script>window.top.location.href='https://apps.facebook.com/APP_NAMESPACE/'</script>";
         exit;
     } catch(Facebook\Exceptions\FacebookSDKException $e) {
         // When validation fails or other local issues
         echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
     }
-
-    echo $response['id'];
-
-    // Now you can redirect to another page and use the
-    // access token from $_SESSION['facebook_access_token']
+    // priting basic info about user on the screen
+    print_r($profile);
+    // Now you can redirect to another page and use the access token from $_SESSION['facebook_access_token']
 } else {
     $helper = $fb->getRedirectLoginHelper();
-    $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/', $permissions);
+    $loginUrl = $helper->getLoginUrl('https://apps.facebook.com/APP_NAMESPACE/', $permissions);
     echo "<script>window.top.location.href='".$loginUrl."'</script>";
 }
-
-?>
