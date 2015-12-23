@@ -11,10 +11,13 @@ $fb = new Facebook\Facebook([
 
 $helper = $fb->getCanvasHelper();
 
-echo "Hello";
-die;
+
 
 $permissions = ['email', 'publish_actions']; // optional
+
+print_r($permissions);
+die;
+
 try {
     if (isset($_SESSION['facebook_access_token'])) {
         $accessToken = $_SESSION['facebook_access_token'];
