@@ -9,11 +9,7 @@ $fb = new Facebook\Facebook([
     'default_graph_version' => 'v2.5',
 ]);
 
-
-
 $helper = $fb->getCanvasHelper();
-$permissions = ['email', 'publish_actions']; // optional
-
 
 try {
     if (isset($_SESSION['facebook_access_token'])) {
@@ -31,21 +27,22 @@ try {
     exit;
 }
 
-
 if (isset($accessToken)) {
     if (isset($_SESSION['facebook_access_token'])) {
         $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
     } else {
         $_SESSION['facebook_access_token'] = (string) $accessToken;
         // OAuth 2.0 client handler
-//        $oAuth2Client = $fb->getOAuth2Client();
+        $oAuth2Client = $fb->getOAuth2Client();
         // Exchanges a short-lived access token for a long-lived one
         $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($_SESSION['facebook_access_token']);
-        $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
+//        $_SESSION['facebook_access_token'] = (string) $longLivedAccessToken;
         $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
     }
 
     // validating the access token
+
+   /*
     try {
         $request = $fb->get('/me');
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
@@ -62,16 +59,20 @@ if (isset($accessToken)) {
         echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
     }
-
+*/
     // posting on user timeline using publish_actins permission
     try {
+
         // message must come from the user-end
         $data = ['message' => 'testing...'];
         $request = $fb->post('/me/feed', $data);
-        $response = $request->getGraphEdge()->asArray;
+        $response = $request->getGraphUser();
+
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
         // When Graph returns an error
         echo 'Graph returned an error: ' . $e->getMessage();
+        unset($_SESSION['facebook_access_token']);
+        echo "<script>window.top.location.href='https://fbappi.herokuapp.com/index.php'</script>";
         exit;
     } catch(Facebook\Exceptions\FacebookSDKException $e) {
         // When validation fails or other local issues
@@ -85,6 +86,7 @@ if (isset($accessToken)) {
     // access token from $_SESSION['facebook_access_token']
 } else {
     $helper = $fb->getRedirectLoginHelper();
+    $permission = ['email', 'publish_actions'];
     $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/index.php', $permissions);
     echo "<script>window.top.location.href='".$loginUrl."'</script>";
 }
