@@ -17,9 +17,10 @@ $permissions = ['email', 'publish_actions']; // optional
 
 try {
     if (isset($_SESSION['facebook_access_token'])) {
-        $accessToken = $_SESSION['facebook_access_token'];
-        print_r($accessToken);
+        echo "Hello";
         die;
+        $accessToken = $_SESSION['facebook_access_token'];
+
     } else {
         $accessToken = $helper->getAccessToken();
     }
