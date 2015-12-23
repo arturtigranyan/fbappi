@@ -11,7 +11,8 @@ $fb = new Facebook\Facebook([
 ]);
 
 $helper = $fb->getCanvasHelper();
-$permissions = ['email', 'publish_actions']; // optional
+
+$permissions = ['email']; // optional
 
 
 try {
