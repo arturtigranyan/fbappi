@@ -49,7 +49,8 @@ if (isset($accessToken)) {
             unset($_SESSION['facebook_access_token']);
             $helper = $fb->getRedirectLoginHelper();
             $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/', $permissions);
-            echo "<script>window.top.location.href='".$loginUrl."'</script>";
+//            echo "<script>window.top.location.href='".$loginUrl."'</script>";
+            echo "<script>window.top.location.href='https://fbappi.herokuapp.com/'</script>";
             exit;
         }
     } catch(Facebook\Exceptions\FacebookSDKException $e) {
