@@ -48,7 +48,7 @@ if (isset($accessToken)) {
         if ($e->getCode() == 190) {
             unset($_SESSION['facebook_access_token']);
             $helper = $fb->getRedirectLoginHelper();
-            $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/index.php', $permissions);
+            $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/newfbappi/', $permissions);
             echo "<script>window.top.location.href='".$loginUrl."'</script>";
             exit;
         }
@@ -80,7 +80,7 @@ if (isset($accessToken)) {
     // access token from $_SESSION['facebook_access_token']
 } else {
     $helper = $fb->getRedirectLoginHelper();
-    $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/index.php', $permissions);
+    $loginUrl = $helper->getLoginUrl('https://fbappi.herokuapp.com/newfbappi/', $permissions);
     echo "<script>window.top.location.href='".$loginUrl."'</script>";
 }
 
