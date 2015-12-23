@@ -15,12 +15,11 @@ $helper = $fb->getCanvasHelper();
 
 $permissions = ['email', 'publish_actions']; // optional
 
-print_r($permissions);
-die;
-
 try {
     if (isset($_SESSION['facebook_access_token'])) {
         $accessToken = $_SESSION['facebook_access_token'];
+        print_r($accessToken);
+        die;
     } else {
         $accessToken = $helper->getAccessToken();
     }
