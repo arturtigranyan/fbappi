@@ -41,24 +41,6 @@ if (isset($accessToken)) {
         $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
     }
 
-    // validating the access token
-    try {
-        $request = $fb->get('/me');
-    } catch(Facebook\Exceptions\FacebookResponseException $e) {
-        // When Graph returns an error
-        if ($e->getCode() == 190) {
-            unset($_SESSION['facebook_access_token']);
-            $helper = $fb->getRedirectLoginHelper();
-            $loginUrl = $helper->getLoginUrl('https://apps.facebook.com/newfbappi', $permissions);
-            echo "<script>window.top.location.href='".$loginUrl."'</script>";
-            exit;
-        }
-    } catch(Facebook\Exceptions\FacebookSDKException $e) {
-        // When validation fails or other local issues
-        echo 'Facebook SDK returned an error: ' . $e->getMessage();
-        exit;
-    }
-
     // posting on user timeline using publish_actins permission
     try {
         // message must come from the user-end
