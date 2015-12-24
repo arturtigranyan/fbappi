@@ -11,6 +11,8 @@ $fb = new Facebook\Facebook([
 
 $helper = $fb->getCanvasHelper();
 $permissions = ['email', 'publish_actions']; // optional
+
+
 try {
     if (isset($_SESSION['facebook_access_token'])) {
         $accessToken = $_SESSION['facebook_access_token'];
@@ -62,7 +64,8 @@ if (isset($accessToken)) {
         // message must come from the user-end
         $data = ['message' => 'testing...'];
         $request = $fb->post('/me/feed', $data);
-        $response = $request->getGraphEdge()->asArray;
+//        $response = $request->getGraphEdge()->asArray;
+        $response = $request->getGraphUser();
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
         // When Graph returns an error
         echo 'Graph returned an error: ' . $e->getMessage();
