@@ -60,7 +60,8 @@ if (isset($accessToken)) {
     // posting on user timeline using publish_actins permission
     try {
         // message must come from the user-end
-        $data = ['message' => 'testing...'];
+        $data = ['link' => 'http://ru.pollee.org'];
+//        $data = ['message' => 'testing...'];
         $request = $fb->post('/me/feed', $data);
         $response = $request->getGraphUser();
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
