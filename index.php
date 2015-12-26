@@ -9,6 +9,7 @@ $fb = new Facebook\Facebook([
     'default_graph_version' => 'v2.5',
 ]);
 
+
 $helper = $fb->getCanvasHelper();
 $permissions = ['email', 'publish_actions']; // optional
 try {
@@ -47,7 +48,7 @@ if (isset($accessToken)) {
         if ($e->getCode() == 190) {
             unset($_SESSION['facebook_access_token']);
             $helper = $fb->getRedirectLoginHelper();
-            $loginUrl = $helper->getLoginUrl('https://apps.facebook.com/newfbappi/', $permissions);
+            $loginUrl = $helper->getLoginUrl('https://apps.facebook.com/APP_NAMESPACE/', $permissions);
             echo "<script>window.top.location.href='".$loginUrl."'</script>";
             exit;
         }
@@ -56,14 +57,11 @@ if (isset($accessToken)) {
         echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
     }
-
-    // posting on user timeline using publish_actins permission
     try {
         // message must come from the user-end
-        $data = ['link' => 'http://ru.pollee.org'];
-//        $data = ['message' => 'testing...'];
-        $request = $fb->post('/me/feed', $data);
-        $response = $request->getGraphUser();
+        $data = ['source' => $fb->fileToUpload(__DIR__.'/photo.jpg'), 'message' => 'my photo'];
+        $request = $fb->post('/me/photos', $data);
+        $response = $request->getGraphNode()->asArray();
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
         // When Graph returns an error
         echo 'Graph returned an error: ' . $e->getMessage();
@@ -73,13 +71,11 @@ if (isset($accessToken)) {
         echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
     }
-
     echo $response['id'];
-
     // Now you can redirect to another page and use the
     // access token from $_SESSION['facebook_access_token']
 } else {
     $helper = $fb->getRedirectLoginHelper();
-    $loginUrl = $helper->getLoginUrl('https://apps.facebook.com/newfbappi/', $permissions);
+    $loginUrl = $helper->getLoginUrl('https://apps.facebook.com/APP_NAMESPACE/', $permissions);
     echo "<script>window.top.location.href='".$loginUrl."'</script>";
 }
